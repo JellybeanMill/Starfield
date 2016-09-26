@@ -1,7 +1,11 @@
-//your code here
+NormalParticle flyingStars = new NormalParticle[1000];
 void setup()
 {
-	//your code here
+	size(1000,300)
+	for (int i=0;i<flyingStars.length;i++)
+	{
+		flyingStars[i] = new NormalParticle();
+	}
 }
 void draw()
 {
@@ -9,7 +13,13 @@ void draw()
 }
 class NormalParticle
 {
-	//your code here
+	double myX,myY,myRad,mySpeed;
+	NormalParticle()
+	{
+		myX = 500;
+		myY = 300;
+		myRad = (Math.radnom()*6.28318530718);
+	}
 }
 interface Particle
 {
