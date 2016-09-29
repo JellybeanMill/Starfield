@@ -1,3 +1,10 @@
+boolean circleRPov = true;
+boolean circleGPov = true;
+boolean circleBPov = true;
+int circleColorR = 255;
+int circleColorG = 255;
+int circleColorB = 255;
+int colorRandomVar = 5;
 Particle [] flyingStars = new Particle[1500];
 void setup()
 {
@@ -15,9 +22,57 @@ void draw()
 		flyingStars[i].show();
 		flyingStars[i].move();
 	}
-	int mainColor = color((int)(Math.random()*150)+56,(int)(Math.random()*150)+56,(int)(Math.random()*150)+56);
-	stroke(mainColor);
-	fill(mainColor);
+	midCircle();
+}
+void midCircle()
+{
+	if (circleRPov == true)
+	{
+		circleColorR = circleColorR + ((int)(Math.random()*colorRandomVar));
+		if (circleColorR >= 255)
+		{
+			circleRPov = false;
+		}
+	} else
+	{
+		circleColorR = circleColorR - ((int)(Math.random()*colorRandomVar));
+		if (circleColorR <= 50)
+		{
+			circleRPov = true;
+		}
+	}
+	if (circleGPov == true)
+	{
+		circleColorG = circleColorG + ((int)(Math.random()*colorRandomVar));
+		if (circleColorG >= 255)
+		{
+			circleGPov = false;
+		}
+	} else
+	{
+		circleColorG = circleColorG - ((int)(Math.random()*colorRandomVar));
+		if (circleColorG <= 50)
+		{
+			circleGPov = true;
+		}
+	}
+	if (circleBPov == true)
+	{
+		circleColorB = circleColorB + ((int)(Math.random()*colorRandomVar));
+		if (circleColorB >= 255)
+		{
+			circleBPov = false;
+		}
+	} else
+	{
+		circleColorB = circleColorB - ((int)(Math.random()*colorRandomVar));
+		if (circleColorB <= 50)
+		{
+			circleBPov = true;
+		}
+	}
+	noStroke();
+	fill(circleColorR,circleColorG,circleColorB);
 	ellipse(500,300,20,20);
 }
 class NormalParticle implements Particle
@@ -41,13 +96,9 @@ class NormalParticle implements Particle
 	{
 		if (ranShow == true)
 		{
-			stroke(255);
+			stroke(myColor);
 			strokeWeight((int)mySize*0.25);
 			line((float)myX,(float)myY,(float)prevX,(float)prevY);
-			stroke(myColor);
-			strokeWeight(1);
-			fill(myColor);
-			ellipse((float)myX,(float)myY,(int)mySize,(int)mySize);
 		}
 	}
 	void move()
@@ -76,12 +127,17 @@ interface Particle
 	public void show();
 	public void move();
 }
-class OddballParticle //uses an interface
+class OddballParticle implements Particle
 {
-	//your code here
+	double myX,myY,myRad,mySpeed;
+	int myColor,mySize;
+	boolean ranShow;
+	OddballParticle()
+	{
+		myRad = (Math.random()*6.28318530718);
+	}
 }
 class JumboParticle //uses inheritance
 {
 	//your code here
 }
-
