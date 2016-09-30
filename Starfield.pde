@@ -135,7 +135,21 @@ class OddballParticle implements Particle
 	OddballParticle()
 	{
 		myRad = (Math.random()*6.28318530718);
+		myX = (Math.sin(myRad)*600)+500;
+		myY = (Math.cos(myRad)*350)+300;
+		mySpeed = Math.random()*0.1;
+		myColor = color((int)(Math.random()*100)+156,(int)(Math.random()*100)+156,(int)(Math.random()*100)+156);
+		mySize = (int)(Math.random()*5);
+		ranShow = false;
 	}
+	void show()
+	{
+		noStroke();
+		triangle(myX,myY,myX-5,myY-5,myX-5,myY-10);
+		triangle(myX,myY,myX-5,myY-5,myX-10,myY-5);
+	}
+	void move()
+	{}
 }
 class JumboParticle //uses inheritance
 {
