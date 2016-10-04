@@ -81,13 +81,13 @@ void particleCreation(int inputQueueNum)
 	if (deciderNum <0.97)
 	{
 		flyingStars[inputQueueNum] = new NormalParticle(inputQueueNum);
-	}else if (deciderNum < 0.99)
+	}else /*if (deciderNum < 0.99)*/
 	{
 		flyingStars[inputQueueNum] = new OddballParticle(inputQueueNum);
-	}else
+	}/*else
 	{
-		flyingStars[inputQueueNum] = new JumboParticle(inputQueueNum);
-	}
+		flyingStars[inputQueueNum] = new JumboParticle();
+	}*/
 }
 class NormalParticle implements Particle
 {
@@ -96,8 +96,8 @@ class NormalParticle implements Particle
 	boolean ranShow;
 	NormalParticle(int inputQueueNum)
 	{
-		myX = (int)(Math.random()*100)+450;
-		myY = (int)(Math.random()*100)+250;
+		myX = (int)(Math.random()*10)+495;
+		myY = (int)(Math.random()*10)+295;
 		mySpeed = 1;
 		myColor =color((int)(Math.random()*150)+56,(int)(Math.random()*150)+56,(int)(Math.random()*150)+56);
 		mySize = (int)(Math.random()*6)+1;
@@ -107,7 +107,7 @@ class NormalParticle implements Particle
 		myRad = (Math.random()*6.28318530718);
 		queueNum = inputQueueNum;
 	}
-	void show()
+	public void show()
 	{
 		if (ranShow == true)
 		{
@@ -116,7 +116,7 @@ class NormalParticle implements Particle
 			line((float)myX,(float)myY,(float)prevX,(float)prevY);
 		}
 	}
-	void move()
+	public void move()
 	{
 		prevX = myX;
 		prevY = myY;
@@ -147,37 +147,55 @@ interface Particle
 }
 class OddballParticle implements Particle
 {
-	double myX,myY,prevX,prevY,myRad,mySpeed;
-	int myColor,mySize,queueNum;
+	double myX,myY,prevX,prevY,myRad,mySpeed,mySize;
+	int myColor,queueNum;
 	boolean ranShow;
 	OddballParticle(int inputQueueNum)
 	{
-		myRad = (Math.random()*6.28318530718);
-		myX = (Math.sin(myRad)*600)+500;
-		myY = (Math.cos(myRad)*350)+300;
+		if (Math.random()<=0.5)
+		{
+			myX = (int)(Math.random()*1200)-100;
+			if(Math.random()<=0.5)
+			{
+				myY = (int)(Math.random()*100)-100;
+			}else
+			{
+				myY = (int)(Math.random()*100)+600;
+			}
+		}else
+		{
+			myY = (int)(Math.random()*800)-100;
+			if(Math.random()<=0.5)
+			{
+				myX = (int)(Math.random()*100)-100;
+			}else
+			{
+				myx = (int)(Math.random()*100)+1000;
+			}
+		}
 		prevX = myX;
 		prevY = myY;
-		mySpeed = Math.random()*0.1;
+		mySpeed = Math.random()*10;
 		myColor = color((int)(Math.random()*100)+156,(int)(Math.random()*100)+156,(int)(Math.random()*100)+156);
 		mySize = (int)(Math.random()*6)+1;
 		ranShow = true;
 		queueNum = inputQueueNum;
 	}
-	void show()
+	public void show()
 	{
-		strokeWeight((int)(mySize*5));
+		strokeWeight((int)(mySize));
 		stroke(255);
-		line(myX,myY,prevX,prevY);
+		line((float)myX,(float)myY,(float)prevX,(float)prevY);
 	}
-	void move()
+	public void move()
 	{
 		prevX = myX;
 		prevY = myY;
 		myX = myX-(Math.sin(myRad)*mySpeed);
 		myY = myY-(Math.cos(myRad)*mySpeed);
-		mySpeed = mySpeed - (mySpeed*Math.random()*0.1);
-		mySize = mySize - (Math.random()*0.15);
-		if(((myX<=520)||(myX>=480))&&((myY<=320)||(myY>=280)))
+		mySpeed = mySpeed - (mySpeed*Math.random()*0.01);
+		mySize = mySize - (mySize*Math.random()*0.005);
+		if(((myX<=520)&&(myX>=480)&&(myY<=320)&&(myY>=280))||(((myX<=-100)||(myX>=1100))&&((myY<=-100)||(myY>=700))))
 		{
 			/*
 			ranShow = true;
@@ -193,7 +211,8 @@ class OddballParticle implements Particle
 		}
 	}
 }
-class JumboParticle //uses inheritance
+/*
+class JumboParticle extends NormalParticle
 {
-	//your code here
 }
+*/
