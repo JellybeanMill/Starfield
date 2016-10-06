@@ -6,6 +6,10 @@ int circleColorG = 255;
 int circleColorB = 255;
 int colorRandomVar = 5;
 Particle [] flyingStars = new Particle[1500];
+CenterPixels pixelUD = new CenterPixels(500,280,90.0);
+CenterPixels pixelD1 = new CenterPixels(480,280,45.0);
+CenterPixels pixelLR = new CenterPixels(480,300,00.0);
+CenterPixels pixelD2 = new CenterPixels(480,320,315.0);
 void setup()
 {
 	size(1000,600);
@@ -16,15 +20,23 @@ void setup()
 }
 void draw()
 {
+	pixelUD.show();
+	pixelD1.show();
+	pixelLR.show();
+	pixelD2.show();
+	pixelUD.move();
+	pixelD1.move();
+	pixelLR.move();
+	pixelD2.move();
 	background(0);
 	for(int i=0;i<flyingStars.length;i++)
 	{
 		flyingStars[i].show();
 		flyingStars[i].move();
 	}
-	midCircle();
+	//midCircle();
 }
-void midCircle()
+/*void midCircle()
 {
 	if (circleRPov == true)
 	{
@@ -74,25 +86,25 @@ void midCircle()
 	noStroke();
 	fill(circleColorR,circleColorG,circleColorB);
 	ellipse(500,300,20,20);
-}
+}*/
 void particleCreation()
 {
-	int emptNum;
+	int emptNum=-15;
 	for (int i = 0;i<flyingStars.length;i++)
 	{
-		if (flyingStars[i].ranShow == false)
+		if (flyingStars[i].checkDead() == false)
 		{
 			emptNum = i;
 		}
 	}
 	double deciderNum = Math.random();
-	if (deciderNum <0.97)
+	if (deciderNum <0.97&&emptNum!=-15)
 	{
 		flyingStars[emptNum] = new NormalParticle();
-	}else if (deciderNum < 0.99)
+	}else if (deciderNum < 0.999&&emptNum!=-15)
 	{
 		flyingStars[emptNum] = new OddballParticle();
-	}else
+	}else if (emptNum!=-15)
 	{
 		flyingStars[emptNum] = new JumboParticle();
 	}
@@ -113,7 +125,6 @@ class NormalParticle implements Particle
 		prevX = 500;
 		prevY = 300;
 		myRad = (Math.random()*6.28318530718);
-		queueNum = inputQueueNum;
 	}
 	public void show()
 	{
@@ -138,12 +149,16 @@ class NormalParticle implements Particle
 			ranShow=false;
 		}
 	}
+	public boolean checkDead()
+	{
+		return ranShow;
+	}
 }
 interface Particle
 {
 	public void show();
 	public void move();
-	public boolean ranShow;
+	public boolean checkDead();
 }
 class OddballParticle implements Particle
 {
@@ -180,7 +195,6 @@ class OddballParticle implements Particle
 		myColor = color((int)(Math.random()*100)+156,(int)(Math.random()*100)+156,(int)(Math.random()*100)+156);
 		mySize = (int)(Math.random()*7)+5;
 		ranShow = true;
-		queueNum = inputQueueNum;
 	}
 	public void show()
 	{
@@ -199,8 +213,12 @@ class OddballParticle implements Particle
 		if(((myX<=510)&&(myX>=490)&&(myY<=310)&&(myY>=290))||((int)mySize==0))
 		{
 			particleCreation();
-			ranshow=false;
+			ranShow=false;
 		}
+	}
+	public boolean checkDead()
+	{
+		return ranShow;
 	}
 }
 class JumboParticle extends NormalParticle
@@ -209,9 +227,53 @@ class JumboParticle extends NormalParticle
 	{
 		if (ranShow == true)
 		{
-			stroke((int)(Math.random()*256),(int)(Math.random()*256),(int)(Math.random()*256));
-			strokeWeight((int)mySize*0.25);
+			stroke((int)(Math.random()*206)+50,(int)(Math.random()*206)+50,(int)(Math.random()*206)+50);
+			strokeWeight((int)mySize*3);
 			line((float)myX,(float)myY,(float)prevX,(float)prevY);
+		}
+	}
+}
+class CenterPixels
+{
+	int startX,startY,myX,myY;
+	boolean posDir;
+	double myRad;
+	CenterPixels(int inputX,int inputY,float inputDegrees)
+	{
+		startX = inputX;
+		startY = inputY;
+		myX = startX;
+		myY = startY;
+		posDir = true;
+		myRad = radians(inputDegrees);
+	}
+	void show()
+	{
+		noStroke();
+		fill(255);
+		ellipse(myX,myY,3,3);
+	}
+	void move()
+	{
+		double definedRandom = Math.random();
+		if (posDir == true)
+		{
+			myX+=(int)(Math.cos(myRad)*2*definedRandom);
+			myY+=(int)(Math.sin(myRad)*2*definedRandom);
+		}else
+		{
+			myX-=(int)(Math.cos(myRad)*2*definedRandom);
+			myY-=(int)(Math.sin(myRad)*2*definedRandom);
+		}
+		if (startX-myX>20||startY-myY>20||startX-myX<0||startY-myY<0)
+		{
+			if (posDir == true)
+			{
+				posDir = false;
+			}else
+			{
+				posDir = true;
+			}
 		}
 	}
 }
