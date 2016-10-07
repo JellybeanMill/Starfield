@@ -6,10 +6,10 @@ int circleColorG = 255;
 int circleColorB = 255;
 int colorRandomVar = 5;
 Particle [] flyingStars = new Particle[1500];
-CenterPixels pixelUD = new CenterPixels(500,280,90.0);
-CenterPixels pixelD1 = new CenterPixels(480,280,45.0);
-CenterPixels pixelLR = new CenterPixels(480,300,00.0);
-CenterPixels pixelD2 = new CenterPixels(480,320,315.0);
+CenterPixels pixelUD = new CenterPixels();
+CenterPixels pixelD1 = new CenterPixels();
+CenterPixels pixelLR = new CenterPixels();
+CenterPixels pixelD2 = new CenterPixels();
 void setup()
 {
 	size(1000,600);
@@ -20,6 +20,12 @@ void setup()
 }
 void draw()
 {
+	background(0);
+	for(int i=0;i<flyingStars.length;i++)
+	{
+		flyingStars[i].show();
+		flyingStars[i].move();
+	}
 	pixelUD.show();
 	pixelD1.show();
 	pixelLR.show();
@@ -28,12 +34,6 @@ void draw()
 	pixelD1.move();
 	pixelLR.move();
 	pixelD2.move();
-	background(0);
-	for(int i=0;i<flyingStars.length;i++)
-	{
-		flyingStars[i].show();
-		flyingStars[i].move();
-	}
 	//midCircle();
 }
 /*void midCircle()
@@ -101,7 +101,7 @@ void particleCreation()
 	if (deciderNum <0.97&&emptNum!=-15)
 	{
 		flyingStars[emptNum] = new NormalParticle();
-	}else if (deciderNum < 0.999&&emptNum!=-15)
+	}else if (deciderNum < 0.995&&emptNum!=-15)
 	{
 		flyingStars[emptNum] = new OddballParticle();
 	}else if (emptNum!=-15)
@@ -235,45 +235,30 @@ class JumboParticle extends NormalParticle
 }
 class CenterPixels
 {
-	int startX,startY,myX,myY;
-	boolean posDir;
-	double myRad;
-	CenterPixels(int inputX,int inputY,float inputDegrees)
+	double myX,myY;
+	int rangeDistX,rangeDistY,covDistX,covDistY;
+	CenterPixels()
 	{
-		startX = inputX;
-		startY = inputY;
-		myX = startX;
-		myY = startY;
-		posDir = true;
-		myRad = radians(inputDegrees);
+		myX = 500;
+		myY = 300;
+		rangeDistX = 510 - (int)myX;
+		rangeDistY = 310 - (int)myY;
+		covDistX = -(490-(int)myX);
+		covDistY = -(290-(int)myY);
 	}
 	void show()
 	{
 		noStroke();
-		fill(255);
-		ellipse(myX,myY,3,3);
+		fill((int)(Math.random()*206)+50,(int)(Math.random()*206)+50,(int)(Math.random()*206)+50);
+		ellipse((int)myX,(int)myY,5,5);
 	}
 	void move()
 	{
-		double definedRandom = Math.random();
-		if (posDir == true)
-		{
-			myX+=(int)(Math.cos(myRad)*2*definedRandom);
-			myY+=(int)(Math.sin(myRad)*2*definedRandom);
-		}else
-		{
-			myX-=(int)(Math.cos(myRad)*2*definedRandom);
-			myY-=(int)(Math.sin(myRad)*2*definedRandom);
-		}
-		if (startX-myX>20||startY-myY>20||startX-myX<0||startY-myY<0)
-		{
-			if (posDir == true)
-			{
-				posDir = false;
-			}else
-			{
-				posDir = true;
-			}
-		}
+		rangeDistX = 510 - (int)myX;
+		rangeDistY = 310 - (int)myY;
+		covDistX = -(490-(int)myX);
+		covDistY = -(290-(int)myY);
+		myX = myX + (((Math.random()*rangeDistX)-covDistX));
+		myY = myY + (((Math.random()*rangeDistY)-covDistY));
 	}
 }
